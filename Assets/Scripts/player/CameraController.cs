@@ -16,7 +16,7 @@ public class CameraController : MonoBehaviour
 		  //Start the engine and register the missile
          
        _cam_ID = Admin.RegisterCAM(this.gameObject);
-        Debug.Log($"{_cam_ID} This is cam ID");
+        Debug.Log($"{_cam_ID} This is cam ID and game object name is {this.gameObject.name}");
 		
 		// //Turn all cameras off, except the first default one
 		// for (int i=1; i<cameras.Length; i++)
@@ -40,18 +40,14 @@ public class CameraController : MonoBehaviour
 		//If the c button is pressed, switch to the next camera
 		//Set the camera at the current index to inactive, and set the next one in the array to active
 		//When we reach the end of the camera array, move back to the beginning or the array.
-		Debug.Log ($"Current Camera Index: {Admin._cam_index} ");
-		if (Input.GetKeyDown(KeyCode.C)&&cameras[Admin._cam_index]==this.gameObject)
+	
+		if (Input.GetKeyDown(KeyCode.C))
 		{
 			
-
-			Debug.Log ("C button has been pressed. Switching to the next camera");
-			cameras[Admin._cam_index].gameObject.SetActive(false);
-			Admin._cam_index++;
-			if (Admin._cam_index >= Admin._cam_total)
-				Admin._cam_index = 0;
-            cameras[Admin._cam_index].gameObject.SetActive(true);
-
+			Debug.Log ($"Current Camera Index: {Admin._cam_index} ");
+			Debug.Log("C button has been pressed. Switching to the next camera");
+			Admin.ChangeCamtest();
+	
 			Debug.Log ("Camera with name: " + cameras [currentCameraIndex].GetComponent<Camera>().name + ", is now enabled");
 
 
