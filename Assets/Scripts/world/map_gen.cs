@@ -3,11 +3,15 @@ using UnityEngine;
 
 public class map_gen : MonoBehaviour
 {
-    [SerializeField]
+
+
+GameObject[] detailPrefabs;
+
+[SerializeField]
 [Tooltip("Drag your hex tile prefab here")]
 public GameObject prefab;
 
-GameObject[] detailPrefabs;
+
 
 public GameObject detail_prefab;
     public int edge = 3;
@@ -67,10 +71,17 @@ public GameObject detail_prefab;
                 int randomIndex = Random.Range(0, detailPrefabs.Length);
                 Vector3 pos = new Vector3(x, 0, z);
                 Vector3 pos1 = new Vector3(x, 3.5f, z);
+
+                if(!(x > 17 || x < -17) && !(z > 42 || z < -42)){
+                  
+                    Instantiate(detailPrefabs[randomIndex], pos1, Quaternion.identity, this.transform);
+
+                }
+                
                 
                 // Create hexagon tile
                 GameObject hex = Instantiate(prefab, pos, Quaternion.identity, this.transform);
-                Instantiate(detailPrefabs[randomIndex], pos1, Quaternion.identity, this.transform);
+          
                 
                 // Rotate to next position
                 theta += angleStep;
