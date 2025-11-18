@@ -6,6 +6,10 @@ public class map_gen : MonoBehaviour
     [SerializeField]
 [Tooltip("Drag your hex tile prefab here")]
 public GameObject prefab;
+
+GameObject[] detailPrefabs;
+
+public GameObject detail_prefab;
     public int edge = 3;
 
     public float radius = 1.6f;
@@ -24,8 +28,16 @@ public GameObject prefab;
     {
         if (prefab == null) return;
 
+        detailPrefabs = Resources.LoadAll<GameObject>("map_gen");
+        
+
+        // Instantiate the prefab
+        
+
        // Vector3 center = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
         //Vector3 center = new Vector3(spacing_X, spacing_y, spacing_z);
+
+         
         
         Instantiate(prefab, Vector3.zero, Quaternion.identity, this.transform);
 
@@ -52,11 +64,13 @@ public GameObject prefab;
                 // ring * hexWidth gives us the proper radius for each ring with spacing
                 float x = ring * hexWidth * Mathf.Cos(theta * Mathf.Deg2Rad);
                 float z = ring * hexWidth * Mathf.Sin(theta * Mathf.Deg2Rad);
-
+                int randomIndex = Random.Range(0, detailPrefabs.Length);
                 Vector3 pos = new Vector3(x, 0, z);
+                Vector3 pos1 = new Vector3(x, 3.5f, z);
                 
                 // Create hexagon tile
                 GameObject hex = Instantiate(prefab, pos, Quaternion.identity, this.transform);
+                Instantiate(detailPrefabs[randomIndex], pos1, Quaternion.identity, this.transform);
                 
                 // Rotate to next position
                 theta += angleStep;

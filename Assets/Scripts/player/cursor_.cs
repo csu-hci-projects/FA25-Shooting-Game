@@ -4,6 +4,7 @@ using UnityEngine;
 public class cursor_ : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    bool isbound = false;
     void Start()
     {
         Cursor.visible = false;      
@@ -11,7 +12,10 @@ public class cursor_ : MonoBehaviour
     
         private void OnEnable()
     {
-        gameObject.GetComponent<RectTransform>().anchoredPosition3D =Vector3.zero ;
+        gameObject.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0,15,0);
+
+        
+
 
     }
 
@@ -27,31 +31,37 @@ public class cursor_ : MonoBehaviour
 
         if (posz <= -14)
         {
-            
+            isbound = false;
             posz = -14;
         }
         if (posz >= 16)
         {
+            isbound = false;
             Debug.Log("mousez bound " + posz);
             posz = 16;
         }
         
          if (posx <= -40)
         {
-            
+            isbound = false;
             posx = -40;
         }
         if (posx >= 40)
         {
             Debug.Log("mousez bound " + posz);
              posx = 40;
+             isbound = false;
         }
 
+
+    if (isbound){
         Vector3 pos_ = new Vector3((posz) , 8, posx);
-        
         gameObject.GetComponent<RectTransform>().anchoredPosition3D = pos_;
-        
-        
+        }
+        else
+        {
+            isbound = true;
+        }
         
     }
 }
