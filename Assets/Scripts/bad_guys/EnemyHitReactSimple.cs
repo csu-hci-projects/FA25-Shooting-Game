@@ -1,53 +1,73 @@
 using UnityEngine;
 using System.Collections;
+using TMPro; // only if using TextMeshPro
 
 public class EnemyHitReactSimple : MonoBehaviour
 {
     public Color hitColor = Color.red;
+    public Color missColor = Color.blue;
     public float flashDuration = 0.3f;
+
+    public float textHeight = 2f;
+    public float textLifetime = 1.0f;
 
     Renderer[] rends;
     Color[] originalColors;
 
     void Awake()
     {
-        // gather all renderers on this object and children so whole enemy flashes
         rends = GetComponentsInChildren<Renderer>();
 
-        // create instance materials to avoid changing shared materials at runtime
         originalColors = new Color[rends.Length];
         for (int i = 0; i < rends.Length; i++)
         {
-            // make a unique material instance so we don't recolor the shared material
             Material inst = new Material(rends[i].material);
             rends[i].material = inst;
             originalColors[i] = inst.color;
         }
     }
 
-    // Public method sniper script calls
-    public void HitReact()
+    // now takes bool
+    public void HitReact(bool isHit)
     {
         StopAllCoroutines();
-        StartCoroutine(FlashCoroutine());
+        StartCoroutine(FlashCoroutine(isHit));
+        SpawnFloatingText(isHit ? "HIT!" : "MISS!", isHit);
     }
 
-    IEnumerator FlashCoroutine()
+    IEnumerator FlashCoroutine(bool isHit)
     {
-        // set hit color
+        Color useColor = isHit ? hitColor : missColor;
+
+        // set colored flash
         for (int i = 0; i < rends.Length; i++)
-        {
             if (rends[i] != null)
-                rends[i].material.color = hitColor;
-        }
+                rends[i].material.color = useColor;
 
         yield return new WaitForSeconds(flashDuration);
 
-        // revert to original
+        // revert color
         for (int i = 0; i < rends.Length; i++)
-        {
             if (rends[i] != null)
                 rends[i].material.color = originalColors[i];
-        }
+    }
+
+    void SpawnFloatingText(string msg, bool isHit)
+    {
+        // Create a simple 3D TextMesh
+        GameObject go = new GameObject("HitText");
+        go.transform.position = transform.position + Vector3.up * textHeight;
+
+        TextMesh tm = go.AddComponent<TextMesh>();
+        tm.text = msg;
+        tm.fontSize = 64;
+        tm.characterSize = 0.1f;
+        tm.color = isHit ? Color.red : Color.blue;
+        tm.alignment = TextAlignment.Center;
+
+        // face the player always
+        go.transform.forward = Camera.main.transform.forward;
+
+        Destroy(go, textLifetime);
     }
 }

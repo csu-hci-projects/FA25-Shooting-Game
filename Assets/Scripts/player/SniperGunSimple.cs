@@ -15,6 +15,11 @@ public class SniperGunSimple : MonoBehaviour
     [SerializeField] public float muzzleFlashDuration = 0.06f;
     [SerializeField] public float impactLifetime = 5f;
 
+    [Header("UI")]
+    [SerializeField] private TMPro.TextMeshProUGUI shotChanceText;
+    [SerializeField, Range(0f, 1f)] private float shotChance = 0.01f; // 1% default
+
+
     private float nextFireTime = 0f;
 
     // Input System
@@ -30,6 +35,9 @@ public class SniperGunSimple : MonoBehaviour
     {
         if (playerCamera == null) return;
 
+        if (shotChanceText != null)
+        shotChanceText.text = $"Shot Chance: {(shotChance * 100f).ToString("F0")}%";
+
         // Left mouse click using new Input System
         if (Mouse.current.leftButton.wasPressedThisFrame && Time.time >= nextFireTime)
         {
@@ -43,16 +51,25 @@ public class SniperGunSimple : MonoBehaviour
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, range))
         {
-            if (impactPrefab != null)
-            {
-                GameObject impact = Instantiate(impactPrefab, hit.point + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal));
-                Destroy(impact, impactLifetime);
-            }
 
             EnemyHitReactSimple react = hit.collider.GetComponentInParent<EnemyHitReactSimple>();
             if (react != null)
             {
-                react.HitReact();
+                bool actualHit = Random.value <= shotChance;
+
+                if (actualHit)
+                {
+                    if (impactPrefab != null)
+                    {
+                        GameObject impact = Instantiate(impactPrefab, hit.point + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal));
+                        Destroy(impact, impactLifetime);
+                    }
+                    react.HitReact(true);  // red flash + HIT text
+                }
+                else
+                {
+                    react.HitReact(false); // blue flash + MISS text
+                }
             }
         }
 
