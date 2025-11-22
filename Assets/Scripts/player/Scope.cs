@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,23 +8,31 @@ public class Scope : MonoBehaviour
     public GameObject scopeOverlay;
     public GameObject weaponCamera;
     public Camera mainCamera;
-    public float scopedFOV = .15f;
-    private float normalFOV;
+    public float scopedFOV = 10f; // Zoomed FOV
+    public float normalFOV = 60f; // Default FOV
 
-
-    // Reference to the Input Action
     public InputActionReference scopeAction;
+
+    private void Start()
+    {
+        if (mainCamera == null)
+        {
+            Debug.LogError("Main Camera not assigned!");
+            return;
+        }
+        // Set normalFOV to the initial camera FOV
+        normalFOV = mainCamera.fieldOfView;
+        Debug.Log($"Initial FOV: {normalFOV}");
+    }
 
     private void OnEnable()
     {
-        // Subscribe to the performed event
         scopeAction.action.performed += OnScopePerformed;
         scopeAction.action.Enable();
     }
 
     private void OnDisable()
     {
-        // Unsubscribe to avoid memory leaks
         scopeAction.action.performed -= OnScopePerformed;
         scopeAction.action.Disable();
     }
@@ -34,33 +41,40 @@ public class Scope : MonoBehaviour
     {
         isScoped = !isScoped;
         animator.SetBool("IsScoped", isScoped);
+        Debug.Log($"Scoped state toggled: {isScoped}");
 
         if (isScoped)
-        {
-            StartCoroutine(OnScoped());
-        }
+            OnScoped();
         else
-        {
             OnUnscoped();
-        }
     }
 
     void OnUnscoped()
     {
         scopeOverlay.SetActive(false);
         weaponCamera.SetActive(true);
-
-        mainCamera.fieldOfView = normalFOV;
+        mainCamera.fieldOfView = normalFOV; // Instant reset
+        Debug.Log($"Unscoped: FOV set to {mainCamera.fieldOfView}");
     }
 
-    IEnumerator OnScoped()
+    void OnScoped()
     {
-        yield return new WaitForSeconds(.15f);
         scopeOverlay.SetActive(true);
         weaponCamera.SetActive(false);
-
-        normalFOV = mainCamera.fieldOfView;
-        mainCamera.fieldOfView = scopedFOV;
+        mainCamera.fieldOfView = scopedFOV; // Instant zoom
+        Debug.Log($"Scoped: FOV set to {mainCamera.fieldOfView}");
     }
 
+    private void Update()
+    {
+        // Optional: toggle zoom with Mouse2 (right-click)
+        if (Input.GetKeyDown(KeyCode.Mouse2))
+        {
+            isScoped = !isScoped;
+            if (isScoped)
+                OnScoped();
+            else
+                OnUnscoped();
+        }
+    }
 }
