@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Cinemachine;
 
 public class Scope : MonoBehaviour
 {
@@ -7,22 +8,25 @@ public class Scope : MonoBehaviour
     private bool isScoped = false;
     public GameObject scopeOverlay;
     public GameObject weaponCamera;
-    public Camera mainCamera;
+
+    // THIS is the real camera controller
+    public CinemachineVirtualCamera vcam;
+
     public float scopedFOV = 10f; // Zoomed FOV
-    public float normalFOV = 60f; // Default FOV
+    private float normalFOV;
 
     public InputActionReference scopeAction;
 
     private void Start()
     {
-        if (mainCamera == null)
+        if (vcam == null)
         {
-            Debug.LogError("Main Camera not assigned!");
+            Debug.LogError("Virtual Camera not assigned!");
             return;
         }
-        // Set normalFOV to the initial camera FOV
-        normalFOV = mainCamera.fieldOfView;
-        Debug.Log($"Initial FOV: {normalFOV}");
+
+        normalFOV = vcam.m_Lens.FieldOfView;
+        Debug.Log($"Initial Cinemachine FOV: {normalFOV}");
     }
 
     private void OnEnable()
@@ -53,24 +57,27 @@ public class Scope : MonoBehaviour
     {
         scopeOverlay.SetActive(false);
         weaponCamera.SetActive(true);
-        mainCamera.fieldOfView = normalFOV; // Instant reset
-        Debug.Log($"Unscoped: FOV set to {mainCamera.fieldOfView}");
+
+        vcam.m_Lens.FieldOfView = normalFOV;
+        Debug.Log($"Unscoped: Cinemachine FOV set to {vcam.m_Lens.FieldOfView}");
     }
 
     void OnScoped()
     {
         scopeOverlay.SetActive(true);
         weaponCamera.SetActive(false);
-        mainCamera.fieldOfView = scopedFOV; // Instant zoom
-        Debug.Log($"Scoped: FOV set to {mainCamera.fieldOfView}");
+
+        vcam.m_Lens.FieldOfView = scopedFOV;
+        Debug.Log($"Scoped: Cinemachine FOV set to {vcam.m_Lens.FieldOfView}");
     }
 
     private void Update()
     {
-        // Optional: toggle zoom with Mouse2 (right-click)
-        if (Input.GetKeyDown(KeyCode.Mouse2))
+        // optional debug toggle
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             isScoped = !isScoped;
+
             if (isScoped)
                 OnScoped();
             else

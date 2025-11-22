@@ -699,10 +699,9 @@ MonoBehaviour:
   animator: {fileID: 309752254}
   scopeOverlay: {fileID: 1450614233}
   weaponCamera: {fileID: 711819492}
-  mainCamera: {fileID: 87182606}
-  scopedFOV: 10
-  normalFOV: 40
-  scopeAction: {fileID: -4090225696740746782, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  vcam: {fileID: 1141901975}
+  scopedFOV: 2.5
+  scopeAction: {fileID: 0}
 --- !u!95 &309752254
 Animator:
   serializedVersion: 7
@@ -3495,6 +3494,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
+--- !u!114 &1141901975 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8762286023885395323, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
+  m_PrefabInstance: {fileID: 1141901974}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1168112298
 GameObject:
   m_ObjectHideFlags: 0
