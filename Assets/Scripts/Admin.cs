@@ -32,14 +32,12 @@ public class Admin
         //Debug.Log($"Total engines registered: {totalEngines}");
     }
     
-    public static int RegisterMissle()
+    public static void RegisterTile()
     {
         totalMissles++;
-        Debug.Log($"Total missles registered: {totalMissles}");
-        Missles_Order[totalMissles - 1] = totalMissles;
+        Debug.Log($"Total registered: {totalMissles}");
 
-
-        return totalMissles;
+        
     }
 
 

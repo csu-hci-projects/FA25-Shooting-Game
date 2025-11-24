@@ -1,67 +1,154 @@
 using System.Data.Common;
 using UnityEngine;
+using Unity.Mathematics;
+using UnityEngine.InputSystem;
+using TMPro;
+using System.Collections;
+using Unity.VisualScripting;
 
 public class cursor_ : MonoBehaviour
 {
+
+    public GameObject selector;
+      GameObject selector_instance;
+       Vector3 def;
+        Vector3 s;
+
+        bool canClick = true;
+          
+ 
+      
+      
+
+/*
+     public float height = 8f;
+     public Camera customCam;
+
+    void Update()
+    {
+        // Follow the mouse in world space
+        Ray ray = customCam.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 1000f))
+        {
+            transform.position = hit.point + Vector3.up * height;
+        }
+    }
+
+*/
+
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    bool isbound = false;
+     
+    private InputAction clickAction;
+        private void Awake()
+    {
+     clickAction = new InputAction(
+            type: InputActionType.PassThrough,
+            binding: "<Mouse>/leftButton"
+        );
+    }
+
+
+    
     void Start()
     {
-        Cursor.visible = false;      
+        Cursor.visible = false;    
+              
+      
     }
     
         private void OnEnable()
     {
-        gameObject.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0,15,0);
-
         
+        clickAction.Enable();
+        clickAction.performed += OnClickPerformed;
+        Cursor.lockState = CursorLockMode.Confined;
 
-
+    
     }
 
     // Update is called once per frame
     void Update()
     {
 
+
+        // s = selector.transform.localScale;
+        // s.y = 3f;   // only affect Y
+        // selector.transform.localScale = s;
+
+
+     
+
+     
+
         Vector2 pos = Input.mousePosition;
-        
-    
-        float posx = (float)(pos.x -461);
-        float posz = (float)((pos.y - 189) * (-1));
 
-        if (posz <= -14)
-        {
-            isbound = false;
-            posz = -14;
-        }
-        if (posz >= 16)
-        {
-            isbound = false;
-            Debug.Log("mousez bound " + posz);
-            posz = 16;
-        }
-        
-         if (posx <= -40)
-        {
-            isbound = false;
-            posx = -40;
-        }
-        if (posx >= 40)
-        {
-            Debug.Log("mousez bound " + posz);
-             posx = 40;
-             isbound = false;
-        }
+   
+
+        float posx = math.remap(3, 963, -42,42, pos.x);
+        float posz = math.remap(0, 512, -18, 23, pos.y);
+
+        //Debug.Log("mousex bound " + pos.x+" mousez bound " + pos.y);
 
 
-    if (isbound){
-        Vector3 pos_ = new Vector3((posz) , 8, posx);
+
+
+        Vector3 pos_ = new Vector3(-1*(posz) , 8, posx);
         gameObject.GetComponent<RectTransform>().anchoredPosition3D = pos_;
-        }
-        else
+
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            isbound = true;
+            Cursor.lockState = CursorLockMode.None;
         }
+
+
+
+
+    }
+
+        private void OnDisable()
+    {
+        clickAction.performed -= OnClickPerformed;
+        clickAction.Disable();
+        Cursor.lockState = CursorLockMode.None;
+
+
+    }
+
+        private void OnClickPerformed(InputAction.CallbackContext ctx)
+    {
+
+        Debug.Log("click");
+
+       // if (canClick){
+        
+        selector_instance  = Instantiate(selector, selector.transform.position, Quaternion.identity, this.transform);
+        selector_instance.SetActive(true);
+
+        Destroy(selector_instance, 0.1f);
+        // canClick = false;
+        // }else{
+        //     canClick = true;
+        // }
+    
+
+
+     
+      
+
+        //selector.transform.localScale = def;
         
     }
+
+    IEnumerator Wait()
+{
+    yield return new WaitForSeconds(1f);
+    
+}
+
+
+
+    
 }

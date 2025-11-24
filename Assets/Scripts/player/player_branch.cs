@@ -6,6 +6,7 @@ public class player_branch : MonoBehaviour
  void Awake()
     {
         Admin.Registerplayer(this.gameObject);
+         Debug.Log("I am ", this.gameObject);
     }
     void OnEnable()
     {
