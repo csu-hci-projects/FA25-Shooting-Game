@@ -19,6 +19,10 @@ public class SniperGunSimple : MonoBehaviour
     [SerializeField] private TMPro.TextMeshProUGUI shotChanceText;
     [SerializeField, Range(0f, 1f)] private float shotChance = 0.01f; // 1% default
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip fireSound;
+
 
     private float nextFireTime = 0f;
 
@@ -50,6 +54,8 @@ public class SniperGunSimple : MonoBehaviour
 
     void Shoot()
     {
+        if (audioSource != null && fireSound != null)
+            audioSource.PlayOneShot(fireSound);
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, range))
         {

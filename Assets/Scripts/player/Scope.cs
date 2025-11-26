@@ -4,18 +4,24 @@ using Unity.Cinemachine;
 
 public class Scope : MonoBehaviour
 {
+    [Header("References")]
     public Animator animator;
-    private bool isScoped = false;
     public GameObject scopeOverlay;
     public GameObject weaponCamera;
-
-    // THIS is the real camera controller
     public CinemachineVirtualCamera vcam;
 
+    [Header("Scope Settings")]
     public float scopedFOV = 10f; // Zoomed FOV
     private float normalFOV;
+    private bool isScoped = false;
 
+    [Header("Input")]
     public InputActionReference scopeAction;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip scopeInSound;
+    [SerializeField] private AudioClip scopeOutSound;
 
     private void Start()
     {
@@ -53,27 +59,33 @@ public class Scope : MonoBehaviour
             OnUnscoped();
     }
 
-    void OnUnscoped()
-    {
-        scopeOverlay.SetActive(false);
-        weaponCamera.SetActive(true);
-
-        vcam.m_Lens.FieldOfView = normalFOV;
-        Debug.Log($"Unscoped: Cinemachine FOV set to {vcam.m_Lens.FieldOfView}");
-    }
-
-    void OnScoped()
+    private void OnScoped()
     {
         scopeOverlay.SetActive(true);
         weaponCamera.SetActive(false);
 
-        vcam.m_Lens.FieldOfView = scopedFOV;
-        Debug.Log($"Scoped: Cinemachine FOV set to {vcam.m_Lens.FieldOfView}");
+        if (vcam != null)
+            vcam.m_Lens.FieldOfView = scopedFOV;
+
+        if (audioSource != null && scopeInSound != null)
+            audioSource.PlayOneShot(scopeInSound);
+    }
+
+    private void OnUnscoped()
+    {
+        scopeOverlay.SetActive(false);
+        weaponCamera.SetActive(true);
+
+        if (vcam != null)
+            vcam.m_Lens.FieldOfView = normalFOV;
+
+        if (audioSource != null && scopeOutSound != null)
+            audioSource.PlayOneShot(scopeOutSound);
     }
 
     private void Update()
     {
-        // optional debug toggle
+        // Optional debug toggle
         if (Input.GetKeyDown(KeyCode.Q))
         {
             isScoped = !isScoped;
