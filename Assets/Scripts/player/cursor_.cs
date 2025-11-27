@@ -120,7 +120,7 @@ public class cursor_ : MonoBehaviour
         private void OnClickPerformed(InputAction.CallbackContext ctx)
     {
 
-        Debug.Log("click");
+        //Debug.Log("click");
 
        // if (canClick){
         

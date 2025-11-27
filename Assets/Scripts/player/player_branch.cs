@@ -1,8 +1,10 @@
+using System.Collections.Concurrent;
 using UnityEngine;
 
 public class player_branch : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public int order_num = 0;
  void Awake()
     {
         Admin.Registerplayer(this.gameObject);

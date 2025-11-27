@@ -23,6 +23,8 @@ public class SniperGunSimple : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip fireSound;
 
+   
+
 
     private float nextFireTime = 0f;
 
@@ -59,13 +61,28 @@ public class SniperGunSimple : MonoBehaviour
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, range))
         {
-
+            //Debug.Log($"SniperGunSimple: Hit {hit.collider.gameObject.name} at {hit.point}");
             EnemyHitReactSimple react = hit.collider.GetComponentInParent<EnemyHitReactSimple>();
-            if (react != null)
+            endturn et =  hit.collider.GetComponentInParent<endturn>();
+
+              
+
+            if (react != null|| et != null)
             {
                 bool actualHit = Random.value <= shotChance;
 
-                if (actualHit)
+                if (et != null)
+                {
+
+                    if (impactPrefab != null)
+                    {
+                        GameObject impact = Instantiate(impactPrefab, hit.point + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal));
+                        Destroy(impact, impactLifetime);
+                    }
+                    et.HitReact(true);  // red flash + HIT text
+                    et.endturn_triggered = true;
+                 
+                } else if (actualHit)
                 {
                     if (impactPrefab != null)
                     {

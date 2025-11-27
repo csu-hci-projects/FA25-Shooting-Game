@@ -10,8 +10,21 @@ public class CameraController : MonoBehaviour
 	private int currentCameraIndex = Admin._cam_index;
 	private int _cam_ID;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+
+    void OnEnable()
+    {
+        if (gameObject.GetComponent<Camera>()!= null)
+        {
+			this.gameObject.GetComponent<Camera>().enabled = true;
+        }
+        else
+        {
+            Debug.Log("no cam componet present");
+        }
+       
+    }
+    void Start () {
 
 		  //Start the engine and register the missile
          

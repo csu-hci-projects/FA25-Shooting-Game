@@ -13,6 +13,7 @@ public GameObject prefab;
 
 
 
+
 public GameObject detail_prefab;
     public int edge = 3;
 
@@ -33,6 +34,7 @@ public GameObject detail_prefab;
         if (prefab == null) return;
 
         detailPrefabs = Resources.LoadAll<GameObject>("map_gen");
+
         
 
         // Instantiate the prefab

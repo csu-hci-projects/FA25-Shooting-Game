@@ -22,7 +22,7 @@ public class select_col : MonoBehaviour
     {
         if (other.CompareTag("highlight")&& !isSelected)
         {
-            Debug.Log("Entered select trigger");
+           // Debug.Log("Entered select trigger");
             this.gameObject.GetComponent<Renderer>().material.color = highlightColor;
          
         }
@@ -37,6 +37,7 @@ public class select_col : MonoBehaviour
          this.gameObject.GetComponent<Renderer>().material.color = selColor;
         isSelected = true;
         Admin.RegisterTile();
+        Admin._ply_actions++;
     
     } 
 
@@ -48,7 +49,7 @@ public class select_col : MonoBehaviour
     {
         if (other.CompareTag("highlight")&& !isSelected)
         {
-            Debug.Log("Leave select trigger");
+            //Debug.Log("Leave select trigger");
                this.gameObject.GetComponent<Renderer>().material.color = defaultColor;
          
         }
