@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Cinemachine;
+using StarterAssets;
 
 public class Scope : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class Scope : MonoBehaviour
     public GameObject scopeOverlay;
     public GameObject weaponCamera;
     public CinemachineVirtualCamera vcam;
+    private FirstPersonController fpController;
+
 
     [Header("Scope Settings")]
     public float scopedFOV = 10f; // Zoomed FOV
@@ -29,6 +32,13 @@ public class Scope : MonoBehaviour
         {
             Debug.LogError("Virtual Camera not assigned!");
             return;
+        }
+
+        fpController = FindObjectOfType<FirstPersonController>();
+
+        if (fpController == null)
+        {
+            Debug.LogError("Scope: Could not find FirstPersonController in scene!");
         }
 
         normalFOV = vcam.m_Lens.FieldOfView;
@@ -63,6 +73,7 @@ public class Scope : MonoBehaviour
     {
         scopeOverlay.SetActive(true);
         weaponCamera.SetActive(false);
+        fpController.IsZoomed = true;
 
         if (vcam != null)
             vcam.m_Lens.FieldOfView = scopedFOV;
@@ -75,6 +86,7 @@ public class Scope : MonoBehaviour
     {
         scopeOverlay.SetActive(false);
         weaponCamera.SetActive(true);
+        fpController.IsZoomed = false;
 
         if (vcam != null)
             vcam.m_Lens.FieldOfView = normalFOV;

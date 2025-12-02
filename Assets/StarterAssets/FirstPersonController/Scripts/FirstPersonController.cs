@@ -50,6 +50,9 @@ namespace StarterAssets
 		public float TopClamp = 90.0f;
 		[Tooltip("How far in degrees can you move the camera down")]
 		public float BottomClamp = -90.0f;
+		[Header("Zoom Sensitivity")]
+		public float ZoomRotationMultiplier = 0.3f;   // lower = slower when zoomed
+		[HideInInspector] public bool IsZoomed = false;
 
 		// cinemachine
 		private float _cinemachineTargetPitch;
@@ -137,8 +140,10 @@ namespace StarterAssets
 				//Don't multiply mouse input by Time.deltaTime
 				float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 				
-				_cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
-				_rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
+				float zoomFactor = IsZoomed ? ZoomRotationMultiplier : 1f;
+
+				_cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier * zoomFactor;
+				_rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier * zoomFactor;
 
 				// clamp our pitch rotation
 				_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
