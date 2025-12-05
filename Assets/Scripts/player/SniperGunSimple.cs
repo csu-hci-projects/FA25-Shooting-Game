@@ -121,8 +121,8 @@ public class SniperGunSimple : MonoBehaviour
     {
         //for now this is just the base number of map size
         int base_num = 253;
-        float win_con = 0.5f;
-        shotChance = (float)(Admin.totalMissles*.1) / (base_num * win_con);
+        float win_con = 0.6f;
+        shotChance = (float)(Admin.Players_scores[0]*.1) / (base_num * win_con);
 
         return shotChance;
     }

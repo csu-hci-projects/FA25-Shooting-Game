@@ -10,7 +10,9 @@ GameObject[] detailPrefabs;
 [SerializeField]
 [Tooltip("Drag your hex tile prefab here")]
 public GameObject prefab;
+public GameObject enemy_prefab;
 
+public Color selColor = Color.red;
 
 
 
@@ -51,6 +53,8 @@ public GameObject detail_prefab;
         float hexWidth = radius * 2f * spacing;  // Diameter with spacing
         float hexHeight = hexWidth * Mathf.Sqrt(3f) / 2f;  // Height of hexagon
 
+        int goon_count = 0;
+
         // Loop for each ring
         for (int ring = 1; ring <= edge; ring++)
         {
@@ -73,17 +77,31 @@ public GameObject detail_prefab;
                 int randomIndex = Random.Range(0, detailPrefabs.Length);
                 Vector3 pos = new Vector3(x, 0, z);
                 Vector3 pos1 = new Vector3(x, 3.5f, z);
+                bool spot_taken = false;
 
-                if(!(x > 17 || x < -17) && !(z > 42 || z < -42)){
+           
+
+                if(!(x > 17 || x < -17) && !(z > 45 || z < Random.Range(25,45) )&& goon_count < 5){
+                    //spawn enemy goon
+                    
+                        GameObject goon =  Instantiate(enemy_prefab, pos1, Quaternion.identity, this.transform);
+                        goon.transform.rotation = Quaternion.Euler(0, 180, 0);
+                        Admin.enemys[goon_count] = goon;
+                            
+                        spot_taken = true;
+                        goon_count += 1;
+                    
+                }else  if(!(x > 17 || x < -17) && !(z > 42 || z < -42)){
                   
                     Instantiate(detailPrefabs[randomIndex], pos1, Quaternion.identity, this.transform);
+
 
                 }
                 
                 
                 // Create hexagon tile
                 GameObject hex = Instantiate(prefab, pos, Quaternion.identity, this.transform);
-          
+            
                 
                 // Rotate to next position
                 theta += angleStep;

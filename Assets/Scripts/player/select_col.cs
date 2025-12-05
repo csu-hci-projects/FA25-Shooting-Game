@@ -9,6 +9,7 @@ public class select_col : MonoBehaviour
      public Color selColor = Color.orange;
 
      bool isSelected = false;
+     public bool has_enemy = false;
 
 
 
@@ -16,7 +17,14 @@ public class select_col : MonoBehaviour
     {
         rend = GetComponent<Renderer>();
         rend.material.color = defaultColor;
+        string parentTag = transform.parent.tag;
     }
+
+    void has_enemy_check(Collider other){
+        if(other.CompareTag("has_enemy")){
+            this.gameObject.GetComponent<Renderer>().material.color = Color.red;
+        }
+    }   
 
     void OnTriggerEnter(Collider other)
     {
@@ -24,6 +32,7 @@ public class select_col : MonoBehaviour
         {
            // Debug.Log("Entered select trigger");
             this.gameObject.GetComponent<Renderer>().material.color = highlightColor;
+            
          
         }
     }
@@ -40,6 +49,9 @@ public class select_col : MonoBehaviour
         Admin._ply_actions++;
     
     } 
+     has_enemy_check(other);
+
+    
 
 
 
@@ -53,5 +65,6 @@ public class select_col : MonoBehaviour
                this.gameObject.GetComponent<Renderer>().material.color = defaultColor;
          
         }
+        
     }
 }

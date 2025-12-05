@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -57,42 +58,14 @@ public class StateMachine : MonoBehaviour
         }
     }
 
-    public int Game()
-    {
-
-   
-
-         while(!WinConditon()){
-            SetState(1);
-            SetState(2);
-        }
-
-
-
-
-
-
-        
-       
-
-        //user input to change states would go here
-
-        //start game state
-
-        /*
-
-       
-        //end of game
-
-        SetState(3);
-        */
-        return 0;
-    }
+  
     //method here for basics
     public bool Action()
     {
         bool left = Admin._ply_actions>50?false:true;
-        Debug.Log($"Actions Left: {Admin._ply_actions}");
+        int num = (50 - Admin._ply_actions)/10 ;
+        
+        Debug.Log($"Actions Left: {num}");
         return left;
         
     
@@ -118,6 +91,16 @@ public class StateMachine : MonoBehaviour
 
         
     }
+    
+    void enemyturn_state()
+    {
+        Debug.Log("Enemy Turn State");
+
+        Admin._ply_actions = 50;
+        
+
+        
+    }
 
     // Update is called once per frame
     void Update()
@@ -131,13 +114,11 @@ public class StateMachine : MonoBehaviour
         else
         {
              Debug.Log("all done");
-             //call next state            
+             enemyturn_state();           
         }
 
          //int choice = 0;
          //stay withing currnet loop
-
-
         
     }
 }

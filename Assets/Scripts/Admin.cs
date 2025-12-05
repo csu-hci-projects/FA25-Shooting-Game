@@ -10,8 +10,13 @@ public class Admin
 
     public static int totalMissles = 0;
     public static int[] Missles_Order= new int[5];
+    // player is index 0 and enemy is 1
     public static int[] Players_scores= new int[2];
     public static int[] Players_health= new int[2];
+
+    public static float Enemy_shot_chance = 0f;
+
+
 
 
     public static int _missile_index = 0;
@@ -27,6 +32,8 @@ public class Admin
     public static GameObject[] cameras = new GameObject[5];
     public static GameObject[] players = new GameObject[5];
 
+     public static GameObject[] enemys = new GameObject[5];
+
   
 
 
@@ -38,7 +45,7 @@ public class Admin
     
     public static void RegisterTile()
     {
-        totalMissles++;
+        Players_scores[0] += 1;
         Debug.Log($"Total registered: {totalMissles}");
 
         
