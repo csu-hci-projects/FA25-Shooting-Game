@@ -77,7 +77,7 @@ public GameObject detail_prefab;
                 int randomIndex = Random.Range(0, detailPrefabs.Length);
                 Vector3 pos = new Vector3(x, 0, z);
                 Vector3 pos1 = new Vector3(x, 3.5f, z);
-                bool spot_taken = false;
+            
 
            
 
@@ -88,7 +88,7 @@ public GameObject detail_prefab;
                         goon.transform.rotation = Quaternion.Euler(0, 180, 0);
                         Admin.enemys[goon_count] = goon;
                             
-                        spot_taken = true;
+                   
                         goon_count += 1;
                     
                 }else  if(!(x > 17 || x < -17) && !(z > 42 || z < -42)){

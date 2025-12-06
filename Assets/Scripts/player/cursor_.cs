@@ -14,7 +14,7 @@ public class cursor_ : MonoBehaviour
        Vector3 def;
         Vector3 s;
 
-        bool canClick = true;
+
           
  
       

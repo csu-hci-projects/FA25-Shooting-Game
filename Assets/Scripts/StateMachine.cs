@@ -97,6 +97,18 @@ public class StateMachine : MonoBehaviour
         Debug.Log("Enemy Turn State");
 
         Admin._ply_actions = 50;
+        for (int i = 0; i < Admin.enemys.Length; i++)
+        {
+            if (Admin.enemys[i] != null)
+            {
+                
+
+
+
+
+            }
+        }
+
         
 
         
