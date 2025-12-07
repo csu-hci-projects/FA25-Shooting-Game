@@ -6,7 +6,11 @@ public class select_col : MonoBehaviour
     private Renderer rend;
     public Color defaultColor = Color.blue;
     public Color highlightColor = Color.green;
-     public Color selColor = Color.orange;
+    public Color selColor = Color.orange;
+    public AudioSource audioSource;
+    public AudioClip selectClip;
+    public float playCooldown = 0.1f;
+    private float lastPlayTime = 0f;
 
      bool isSelected = false;
      public bool has_enemy = false;
@@ -32,8 +36,7 @@ public class select_col : MonoBehaviour
         {
            // Debug.Log("Entered select trigger");
             this.gameObject.GetComponent<Renderer>().material.color = highlightColor;
-            
-         
+
         }
     }
 
@@ -47,7 +50,11 @@ public class select_col : MonoBehaviour
         isSelected = true;
         Admin.RegisterTile();
         Admin._ply_actions++;
-    
+        if(audioSource != null && selectClip != null && Time.time - lastPlayTime >= playCooldown)
+        {
+            audioSource.PlayOneShot(selectClip);
+            lastPlayTime = Time.time;
+        }
     } 
      has_enemy_check(other);
 

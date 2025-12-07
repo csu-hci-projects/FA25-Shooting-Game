@@ -134,26 +134,33 @@ namespace StarterAssets
 
 		private void CameraRotation()
 		{
-			// if there is an input
-			if (_input.look.sqrMagnitude >= _threshold)
-			{
-				//Don't multiply mouse input by Time.deltaTime
-				float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-				
-				float zoomFactor = IsZoomed ? ZoomRotationMultiplier : 1f;
+    		// Only process if input magnitude is above threshold
+    		if (_input.look.sqrMagnitude >= _threshold)
+    		{
+        		float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+        		float zoomFactor = IsZoomed ? ZoomRotationMultiplier : 1f;
 
-				_cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier * zoomFactor;
-				_rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier * zoomFactor;
+        		// Apply rotation based on input
+        		_cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier * zoomFactor;
+        		_rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier * zoomFactor;
 
-				// clamp our pitch rotation
-				_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+        		// Clamp pitch to prevent flipping
+        		_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
-				// Update Cinemachine camera target pitch
-				CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+        		// Update camera pitch
+        		CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
 
-				// rotate the player left and right
-				transform.Rotate(Vector3.up * _rotationVelocity);
-			}
+        		// Rotate the player horizontally
+        		transform.Rotate(Vector3.up * _rotationVelocity);
+    		}
+    		else
+    		{
+        		// When input is below threshold, prevent drift by resetting velocity
+        		_rotationVelocity = 0f;
+
+        		// Optional: Reset pitch to avoid drift (if desired)
+        		// _cinemachineTargetPitch = Mathf.Lerp(_cinemachineTargetPitch, 0, Time.deltaTime * someSmoothingFactor);
+    		}
 		}
 
 		private void Move()
