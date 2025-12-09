@@ -1,11 +1,14 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
+using System.Globalization;
+using System;
 
-public class SniperGunSimple : MonoBehaviour
+public class EnemeyGunSimple : MonoBehaviour
 {
     [Header("Required")]
-    [SerializeField] public Camera playerCamera;
+    [SerializeField] public GameObject player;
+      [SerializeField] public Transform player_transform;
     [SerializeField] public Transform muzzle;
     [SerializeField] public GameObject impactPrefab;
 
@@ -32,68 +35,56 @@ public class SniperGunSimple : MonoBehaviour
     private PlayerInput playerInput;
     private InputAction fireAction;
 
+
+
     void Awake()
     {
+        muzzle = this.transform;
+    }
+    void OnEnable()
+    {
+        if (player == null) return;
+
+       Debug.Log("im enabled and shooting");
+
+        shotChance = cal_shotChance();
+
+         Debug.Log("shoot c "+shotChance);
+
+
+        // Left mouse click using new Input System
+     
+     
+            Shoot();
+        
+           this.enabled = false;
         
     }
 
     void Update()
     {
-        if (playerCamera == null) return;
+    
 
-        shotChance = cal_shotChance();
-
-        if (shotChanceText != null)
-        shotChanceText.text = $"Shot Chance: {(shotChance * 100f).ToString("F0")}%";
-
-        // Left mouse click using new Input System
-        if (Mouse.current.leftButton.wasPressedThisFrame && Time.time >= nextFireTime)
-        {
-            nextFireTime = Time.time + fireCooldown;
-            Shoot();
-        }
     }
 
     void Shoot()
     {
         if (audioSource != null && fireSound != null)
             audioSource.PlayOneShot(fireSound);
-        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+        Vector3 direction = (player_transform.position - transform.position).normalized;
+        Ray ray = new Ray(transform.position, direction);
         if (Physics.Raycast(ray, out RaycastHit hit, range))
         {
             //Debug.Log($"SniperGunSimple: Hit {hit.collider.gameObject.name} at {hit.point}");
-            EnemyHitReactSimple react = hit.collider.GetComponentInParent<EnemyHitReactSimple>();
+            PlayerHitReactSimple react = hit.collider.GetComponentInParent<PlayerHitReactSimple>();
 
 
-            endturn et =  hit.collider.GetComponentInParent<endturn>();
 
-            
-
-              
-
-            if (react != null|| et != null)
+            if (react != null)
             {
-                bool actualHit = Random.value <= shotChance;
+                bool actualHit = UnityEngine.Random.value <=shotChance;
 
-                
-                if(react!= null)
-                {
-                    actualHit = react.boss?actualHit:true;
-                }
-
-
-                if (et != null)
-                {
-
-                    if (impactPrefab != null)
-                    {
-                        GameObject impact = Instantiate(impactPrefab, hit.point + hit.normal * 0.01f, Quaternion.LookRotation(hit.normal));
-                        Destroy(impact, impactLifetime);
-                    }
-                    et.HitReact(true);  // red flash + HIT text
-                    et.endturn_triggered = true;
-                 
-                } else if (actualHit)
+                if (actualHit)
                 {
                     if (impactPrefab != null)
                     {
@@ -132,8 +123,8 @@ public class SniperGunSimple : MonoBehaviour
     {
         //for now this is just the base number of map size
         int base_num = 253;
-        float win_con = 0.4f;
-        shotChance = (float)(Admin.Players_scores[0]*.1) / (base_num * win_con);
+          float win_con = 0.1f;
+        shotChance = (float)(Admin.Players_scores[1]*.001) / (base_num*win_con*Admin.enemys.Count);
 
         return shotChance;
     }

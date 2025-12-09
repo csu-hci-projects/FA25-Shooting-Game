@@ -120,14 +120,17 @@ public class cursor_ : MonoBehaviour
         private void OnClickPerformed(InputAction.CallbackContext ctx)
     {
 
-        //Debug.Log("click");
+       
 
-       // if (canClick){
-        
+        if (Admin._ply_actions<50){
         selector_instance  = Instantiate(selector, selector.transform.position, Quaternion.identity, this.transform);
         selector_instance.SetActive(true);
-
         Destroy(selector_instance, 0.1f);
+        }
+        else
+        {
+            Debug.Log("No actions left");
+        }
         // canClick = false;
         // }else{
         //     canClick = true;

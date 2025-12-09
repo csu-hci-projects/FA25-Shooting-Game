@@ -61,7 +61,7 @@ public class Scope : MonoBehaviour
     {
         isScoped = !isScoped;
         animator.SetBool("IsScoped", isScoped);
-        Debug.Log($"Scoped state toggled: {isScoped}");
+       // Debug.Log($"Scoped state toggled: {isScoped}");
 
         if (isScoped)
             OnScoped();

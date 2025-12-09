@@ -2,12 +2,13 @@ using UnityEngine;
 using System.Collections;
 using NUnit.Framework;
 using Unity.Multiplayer.Center.Common;
+using System.Collections.Generic;
 
-public class enemy_eng : MonoBehaviour
+public class enemy_boss : MonoBehaviour
 {
 
     int total_goons = 5;
-    GameObject[] goonsPrefabs;
+     List<GameObject> goonsPrefabs;
     [Tooltip("Drag your goons prefab here")]
     public GameObject prefab;
 
@@ -73,7 +74,7 @@ IEnumerator randomwalk()
    
     {
         // 1. Wait a random delay
-        Debug.Log("Enemy moving");
+        //Debug.Log("Enemy moving");
         lk = false;
         float wait = Random.Range(10f, 15f);   // random time between 1–5 seconds
         yield return new WaitForSeconds(wait);
@@ -94,7 +95,7 @@ IEnumerator randomwalk()
             
             }
 
-            Debug.Log("Enemy new target pos");
+           // Debug.Log("Enemy new target pos");
             target_pos = new Vector3(transform.position.x + x, transform.position.y, transform.position.z + z);
         }
     

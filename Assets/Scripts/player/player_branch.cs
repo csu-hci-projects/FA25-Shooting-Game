@@ -13,6 +13,7 @@ public class player_branch : MonoBehaviour
     void OnEnable()
     {
         Debug.Log("I am enabled:Current Player Index: " + Admin._ply_index);
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     // Update is called once per frame

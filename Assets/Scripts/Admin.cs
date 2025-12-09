@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using Unity.VisualScripting;
 using Unity.Cinemachine;
+using System.Collections.Generic;
+using NUnit.Framework;
 
 public class Admin
 {
@@ -9,17 +11,23 @@ public class Admin
     public static int totalEngines = 0;
 
     public static int totalMissles = 0;
-    public static int[] Missles_Order= new int[5];
+  
     // player is index 0 and enemy is 1
     public static int[] Players_scores= new int[2];
     public static int[] Players_health= new int[2];
+
+   
+
+    public static List<GameObject>  spawn_points = new List<GameObject>();
+  
 
     public static float Enemy_shot_chance = 0f;
 
 
 
 
-    public static int _missile_index = 0;
+    public static int _enemy_walked = 0;
+        public static int turn = 0;
 
     public static bool triggered = false;
     
@@ -29,10 +37,18 @@ public class Admin
     public static int _ply_total = 0;
     public static int _ply_actions = 0;
 
+        public static int _ply_total_actions = 50;
+
+          public static int _ene_killed = 0;
+
+        public static int _ene_killed_total = 5;
+
     public static GameObject[] cameras = new GameObject[5];
     public static GameObject[] players = new GameObject[5];
+     
 
-     public static GameObject[] enemys = new GameObject[5];
+    public static List<GameObject>  enemys = new List<GameObject>();
+
 
   
 
@@ -49,6 +65,13 @@ public class Admin
         Debug.Log($"Total registered: {totalMissles}");
 
         
+    }
+
+    public static void RegisterSpawnPoint(GameObject tile)
+    {
+     spawn_points.Add(tile);
+   
+    
     }
 
 
@@ -118,8 +141,45 @@ public class Admin
 
         return _ply_total;
     }
-    
 
+    public static void inact_player()
+    {
+     players[_ply_index].SetActive(false);
+    }
+
+       public static bool Action()
+    {
+        bool left = Admin._ply_actions>_ply_total_actions?false:true;
+        float num_f = Admin._ply_actions;
+        
+        int num = (_ply_total_actions - Admin._ply_actions)/10 ;
+       
+        Debug.Log($"Actions Left: {num}");
+        return left;
+        
+    
+    }
+
+           public static bool Action_shoot()
+    {
+        bool left = _ene_killed>_ene_killed_total?false:true;
+        int num = _ene_killed_total - _ene_killed ;
+        
+        Debug.Log($"Actions Left: {num}");
+        return left;
+        
+    
+    }
+
+ 
+
+
+
+public static void act_player()
+    {
+        
+        players[_ply_index].SetActive(true);
+    }
 
     public static void Changeplayer()
     {

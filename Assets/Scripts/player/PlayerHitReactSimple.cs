@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using TMPro; // only if using TextMeshPro
 
-public class EnemyHitReactSimple : MonoBehaviour
+public class PlayerHitReactSimple : MonoBehaviour
 {
     public Color hitColor = Color.red;
     public Color missColor = Color.blue;
@@ -11,7 +11,7 @@ public class EnemyHitReactSimple : MonoBehaviour
     public float textHeight = 2f;
     public float textLifetime = 1.0f;
 
-    public bool boss = false;
+
 
     Renderer[] rends;
     Color[] originalColors;
@@ -33,9 +33,10 @@ public class EnemyHitReactSimple : MonoBehaviour
     public void HitReact(bool isHit)
     {
 
-       
+       //test puprs
+    
         //no actions left means you cant hit anything
-        isHit= Admin.Action()?isHit:false;
+
 
         
 
@@ -46,12 +47,8 @@ public class EnemyHitReactSimple : MonoBehaviour
 
         if (isHit)
         {
-            //Admin._ene_killed++;
-            //Debug.Log("Enemy killed "+Admin._ene_killed);
-            Admin._ply_actions =   Admin._ply_actions+11;
-            Debug.Log("updated actions"+Admin._ply_actions);
-            Admin.enemys.Remove(transform.parent.gameObject);
-            Destroy(transform.parent.gameObject);
+            Debug.Log("youve been hit");
+            Admin.Players_health[0] =  Admin.Players_health[0]-1;
         }
     }
 

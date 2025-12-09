@@ -81,15 +81,17 @@ public GameObject detail_prefab;
 
            
 
-                if(!(x > 17 || x < -17) && !(z > 45 || z < Random.Range(25,45) )&& goon_count < 5){
+                if(!(x > 17 || x < -17) && !(z > 45 || z < Random.Range(25,45) )&& Admin.enemys.Count < 5){
                     //spawn enemy goon
                     
                         GameObject goon =  Instantiate(enemy_prefab, pos1, Quaternion.identity, this.transform);
                         goon.transform.rotation = Quaternion.Euler(0, 180, 0);
-                        Admin.enemys[goon_count] = goon;
+                        Admin.enemys.Add(goon);
+                        goon.AddComponent<enemy_goons>();
+                        goon.GetComponent<enemy_goons>().enabled = false;
                             
                    
-                        goon_count += 1;
+                       
                     
                 }else  if(!(x > 17 || x < -17) && !(z > 42 || z < -42)){
                   
@@ -97,10 +99,16 @@ public GameObject detail_prefab;
 
 
                 }
-                
-                
+                if(!(x > 20 || x < -20) && !(z > 45 || z < -45))
+                {
+                    
+                    GameObject hex = Instantiate(prefab, pos, Quaternion.identity, this.transform);
+
+                }
+             
                 // Create hexagon tile
-                GameObject hex = Instantiate(prefab, pos, Quaternion.identity, this.transform);
+                
+                
             
                 
                 // Rotate to next position

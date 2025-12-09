@@ -1,6 +1,8 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections;
+
 
 public class StateMachine : MonoBehaviour
 {
@@ -23,12 +25,17 @@ public class StateMachine : MonoBehaviour
 
     public State endturn;
 
-    
 
     
 
+    public int turn = 0;
+    public float dis_to_next_hex = 4.3f;
     public State currentState;
     public State[] States;
+    public GameObject enemy_prefab;
+
+    public int curr_enemy_num=5;
+    public int max_enemy_num = 5;
 
     public static bool WinConditon()
     {
@@ -60,18 +67,9 @@ public class StateMachine : MonoBehaviour
 
   
     //method here for basics
-    public bool Action()
-    {
-        bool left = Admin._ply_actions>50?false:true;
-        int num = (50 - Admin._ply_actions)/10 ;
-        
-        Debug.Log($"Actions Left: {num}");
-        return left;
-        
-    
-    }
+ 
 
-
+  
 
 
 
@@ -85,9 +83,9 @@ public class StateMachine : MonoBehaviour
         //Start the game from state 0
         //main menu state
         Admin.Players_health[0]= 100;
-        Admin.Players_health[0]= 100;
+        Admin.Players_health[1]= 100;
         Admin.Players_scores[0] = 0;
-        Admin.Players_scores[0] = 0;
+        Admin.Players_scores[1] = 0;
 
         
     }
@@ -95,19 +93,65 @@ public class StateMachine : MonoBehaviour
     void enemyturn_state()
     {
         Debug.Log("Enemy Turn State");
+        //Admin.inact_player();
+        Debug.Log("Enemy count value "+Admin.enemys.Count);
 
-        Admin._ply_actions = 50;
-        for (int i = 0; i < Admin.enemys.Length; i++)
+        curr_enemy_num = Admin.enemys.Count;
+    
+        if(curr_enemy_num < max_enemy_num)
         {
-            if (Admin.enemys[i] != null)
+
+            if ((Admin.turn % 5 == 0) && (Admin.turn > 0))
             {
-                
-
-
-
-
+                max_enemy_num = max_enemy_num + 2;
+                Admin._ply_total_actions =  Admin._ply_total_actions +20;
             }
+
+            int leg= curr_enemy_num<5?5-curr_enemy_num:max_enemy_num-curr_enemy_num;
+          
+            for (int i = 0; i < leg; i++)
+            {
+                    Vector3 pos = new Vector3();
+                    pos = Admin.spawn_points[UnityEngine.Random.Range(0, Admin.spawn_points.Count)].transform.position;
+                    pos.y =3.5f;
+
+                    GameObject goon =  Instantiate(enemy_prefab,pos, Quaternion.identity, this.transform);
+                   
+                        goon.transform.rotation = Quaternion.Euler(0, 180, 0);
+                       
+                        Admin.enemys.Add(goon);
+                            
+                        goon.AddComponent<enemy_goons>();
+                        goon.AddComponent<EnemeyGunSimple>();
+                        goon.GetComponent<enemy_goons>().enabled = false;
+                        goon.GetComponent<EnemeyGunSimple>().enabled = false;
+                       
+                
+            }
+
+             Debug.Log("Enemys spawned "+leg);
+
         }
+
+       
+        for (int i = 0; i < curr_enemy_num; i++)
+        {
+
+                if (Admin.enemys[i]!= null&&Admin.enemys[i].GetComponent<enemy_goons>()!= null)
+                
+            {
+                Admin.enemys[i].GetComponent<enemy_goons>().enabled = true;
+            }
+
+            if (Admin.enemys[i].transform.position.z < 0)
+            {
+                 Admin.enemys[i].GetComponentInChildren<EnemeyGunSimple>().enabled = true;
+               // Admin.enemys[i].GetComponent<EnemeyGunSimple>().enabled = true;
+            }
+           
+        }
+
+        StartCoroutine(Walking_enemy());
 
         
 
@@ -119,9 +163,10 @@ public class StateMachine : MonoBehaviour
     {
 
 
-        if (Action()&&endturn_obj.GetComponent<endturn>().endturn_confirmed==false)
+        if ((endturn_obj.GetComponent<endturn>().endturn_confirmed==false))
         {
-            Debug.Log("You still have a turn left");
+            Admin.Action();
+            Debug.Log("You still have a action left");
         }
         else
         {
@@ -133,4 +178,32 @@ public class StateMachine : MonoBehaviour
          //stay withing currnet loop
         
     }
+
+
+    IEnumerator Walking_enemy()
+{
+   
+    
+        // 1. Wait a random delay
+        Debug.Log("Enemy moving");
+        Debug.Log("Enemys that move"+Admin.enemys.Count);
+
+        yield return new WaitUntil(()=>Admin._enemy_walked>curr_enemy_num);
+        Debug.Log("All Enemy have walked");
+        Admin._ply_actions = 0;
+        Admin._ene_killed = 0;
+        endturn_obj.GetComponent<endturn>().endturn_confirmed=false;
+        endturn_obj.GetComponent<endturn>().endturn_triggered=false;
+        Admin._enemy_walked = 0;
+        Admin.turn++;
+        //Admin.act_player();
+
+
+        
+
+
+
+
+}
+
 }

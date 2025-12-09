@@ -24,8 +24,20 @@ public class select_col : MonoBehaviour
         string parentTag = transform.parent.tag;
     }
 
+    void Update()
+    {
+        if((Admin.turn%5==0)&&(this.gameObject.GetComponent<Renderer>().material.color == Color.red))
+        {
+            this.gameObject.GetComponent<Renderer>().material.color = Color.darkRed;
+            Admin.RegisterSpawnPoint(this.gameObject);
+            
+        }
+
+    }
+
     void has_enemy_check(Collider other){
         if(other.CompareTag("has_enemy")){
+            Admin.Players_scores[1]++;
             this.gameObject.GetComponent<Renderer>().material.color = Color.red;
         }
     }   
@@ -43,13 +55,15 @@ public class select_col : MonoBehaviour
 
     void OnTriggerStay(Collider other)
 {
-    if (other.CompareTag("select"))
+    if (other.CompareTag("select")&&!(this.gameObject.GetComponent<Renderer>().material.color == Color.darkRed))
     {
-        // Slowly reduce player health while inside a damage zone
+        
          this.gameObject.GetComponent<Renderer>().material.color = selColor;
         isSelected = true;
         Admin.RegisterTile();
+      
         Admin._ply_actions++;
+          Debug.Log("this one "+Admin._ply_actions);
         if(audioSource != null && selectClip != null && Time.time - lastPlayTime >= playCooldown)
         {
             audioSource.PlayOneShot(selectClip);
