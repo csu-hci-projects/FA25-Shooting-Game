@@ -2,7 +2,7 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using System.Collections;
-
+using UnityEngine.SceneManagement;
 
 public class StateMachine : MonoBehaviour
 {
@@ -158,10 +158,19 @@ public class StateMachine : MonoBehaviour
         
     }
 
+    private void HandleWinCondition()
+    {
+        if (Admin.Players_health[0] <= 0)
+            SceneManager.LoadScene("LoseScreen");
+
+        else if (Admin.Players_health[1] <= 0)
+            SceneManager.LoadScene("WinScreen");
+    }
+
     // Update is called once per frame
     void Update()
     {
-
+        HandleWinCondition();
 
         if ((endturn_obj.GetComponent<endturn>().endturn_confirmed==false))
         {

@@ -195,6 +195,11 @@ public static void act_player()
 
     }
 
+    public static int ActionsLeft()
+    {
+        return _ply_total_actions - _ply_actions;
+    }
+
     
 
 
