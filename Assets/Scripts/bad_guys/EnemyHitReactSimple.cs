@@ -50,6 +50,14 @@ public class EnemyHitReactSimple : MonoBehaviour
             //Debug.Log("Enemy killed "+Admin._ene_killed);
             Admin._ply_actions =   Admin._ply_actions+11;
             Debug.Log("updated actions"+Admin._ply_actions);
+
+            // If this is the boss, set health to 0
+            if (transform.parent.name == "Main_Enemy")
+            {
+                Admin.Players_health[1] = 0;
+                Debug.Log("Boss hit! Health set to 0");
+            }
+
             Admin.enemys.Remove(transform.parent.gameObject);
             Destroy(transform.parent.gameObject);
         }
