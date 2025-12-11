@@ -36,6 +36,7 @@ public class StateMachine : MonoBehaviour
 
     public int curr_enemy_num=5;
     public int max_enemy_num = 5;
+    private bool gameOver = false;
 
     public static bool WinConditon()
     {
@@ -160,11 +161,18 @@ public class StateMachine : MonoBehaviour
 
     private void HandleWinCondition()
     {
-        if (Admin.Players_health[0] <= 0)
-            SceneManager.LoadScene("LoseScreen");
+        if (gameOver) return;
 
+        if (Admin.Players_health[0] <= 0)
+        {
+            gameOver = true;
+            SceneManager.LoadScene("LoseScreen");
+        }
         else if (Admin.Players_health[1] <= 0)
+        {
+            gameOver = true;
             SceneManager.LoadScene("WinScreen");
+        }
     }
 
     // Update is called once per frame

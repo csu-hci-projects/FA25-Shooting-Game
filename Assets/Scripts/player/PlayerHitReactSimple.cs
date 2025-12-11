@@ -48,7 +48,7 @@ public class PlayerHitReactSimple : MonoBehaviour
         if (isHit)
         {
             Debug.Log("youve been hit");
-            Admin.Players_health[0] =  Admin.Players_health[0]-20;
+            Admin.Players_health[0] =  Admin.Players_health[0]-3;
         }
     }
 
